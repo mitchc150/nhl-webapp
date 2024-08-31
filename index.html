@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHL Standings</title>
+    <!-- Bootstrap 4 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><strong>NHLScores.com</strong></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Scores</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Standings</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Teams
+                </a>
+                <div class="dropdown-menu mega-dropdown p-4" aria-labelledby="navbarDropdown">
+                  <div class="container">
+                    <div class="row">
+                        <div class="col-md-3" id="dropdown-pacific">
+                            <h6 class="dropdown-header">Pacific</h6>
+                        </div>
+                        <div class="col-md-3" id="dropdown-central">
+                            <h6 class="dropdown-header">Central</h6>
+                        </div>
+                        <div class="col-md-3" id="dropdown-metropolitan">
+                            <h6 class="dropdown-header">Metro</h6>
+                        </div>
+                        <div class="col-md-3" id="dropdown-atlantic">
+                            <h6 class="dropdown-header">Atlantic</h6>
+                        </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+            
+    <!-- Background div -->
+    <div class="background"></div>
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <div id="container" class="container mt-3"></div>
+    </div>
+
+        <!-- jQuery and Popper.js for Bootstrap 4's JavaScript plugins -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+        <!-- Vite main.js -->
+        <script type="module" src="/main.js"></script>
+        <script src="/pages/standingsPage.js"></script>
+        <script src="/components/navBar.js"></script>
+</body>
+</html>
