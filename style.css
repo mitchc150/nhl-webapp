@@ -1,0 +1,137 @@
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Make the body column-oriented */
+  align-items: center; /* Center content horizontally */
+  min-width: 320px;
+  background-color: #000000; /* Background color of the entire page */
+  min-height: 100vh;
+}
+
+.navbar {
+  width: 100%;
+  background-color: #162437 !important; /* Dark blue background */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.navbar-content-wrapper {
+  width: 75%; /* Adjust to match .content-wrapper */
+  margin: 0 auto; /* Center the navbar content */
+  display: flex;
+  align-items: center;
+}
+
+.content-wrapper {
+  background-color: #ffffff; /* Background color of the content area */
+  color: #000000; /* Text color inside the content area */
+  width: 85%; /* Adjust the width as needed */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow to the content area */
+  z-index: 1; /* Ensure content is above the background */
+}
+
+.center-text {
+  text-align: center;
+}
+
+.card-header {
+  background-color:  #162437 !important;
+}
+
+.spacing {
+  margin-top: 60px; /* Adjust this value as needed */
+  margin-bottom: 20px; /* Adjust this value as needed */
+}
+
+.nav-item {
+  font-size: 15px;
+}
+
+.nav-title {
+  font-size: 30px;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('resources/background.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1; /* Position it behind all other content */
+}
+
+/* Mega Dropdown Styling */
+/* Mega Dropdown Styling */
+.mega-dropdown {
+  width: 450px;
+  background-color: #162437 !important;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+}
+
+.mega-dropdown .dropdown-header {
+  color: #aaa !important;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: left; /* Ensure alignment is consistent */
+  padding-left: 0.5rem; /* Add padding for better alignment */
+}
+
+.mega-dropdown .dropdown-item {
+  display: block;
+  padding: 0.5rem 0.5rem; /* Ensure consistent padding */
+  color: #fff !important;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.mega-dropdown .dropdown-item:hover {
+  color: #1db9ff !important;
+  background-color: transparent !important;
+}
+
+.mega-dropdown .row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.mega-dropdown .col-md-3 {
+  padding-left: 0;
+  padding-right: 0;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mega-dropdown .col-md-3 h6.dropdown-header {
+  margin-bottom: 0.75rem;
+}
+
+.navbar-nav .dropdown-menu {
+  top: 100%; /* Align dropdown correctly under the nav item */
+  left: 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center; /* Vertically center items */
+  text-decoration: none; /* Remove underline from links if needed */
+}
+
+/* Style for the team image */
+.dropdown-item img {
+  margin-right: 8px; /* Space between the image and text */
+  vertical-align: middle; /* Align the image with text */
+}
+/* Remove Bootstrap’s default hover styling for the dropdown menu */
+.dropdown-menu.show {
+  display: flex;
+  flex-direction: row;
+} 
