@@ -189,7 +189,7 @@ export default function Teams() {
       </Tabs>
       <Box sx={{ flexGrow: 1, overflow: 'auto', marginTop: 2 }}>
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100' }}>
             <CircularProgress />
           </Box>
         ) : (
