@@ -1,4 +1,7 @@
+import { getBasicGameDataForDate } from "./model/games/basicGameData";
+
 const express = require('express');
+const { BasicGameData } = require("./model/games/basicGameData");
 const { getLeagueDataByDivision, getLeagueDataWildCard, getLeagueDataLeagueWide } = require('./model/teams/rankings');
 
 const app = express();
@@ -50,6 +53,17 @@ app.get('/api/teamNamesAndLogosByDivision', async (req: any, res: any) => {
         res.json(teamNamesAndLogos);
     } catch (error) {
         console.error("Error fetching team names and logos: " + error)
+    }
+})
+
+app.get('/api/basicGameDataByDate', async (req: any, res: any) => {
+    try {
+        const apiRes = await fetch("https://api-web.nhle.com/v1/score/2023-11-10");
+        const data: any = await apiRes.json();
+        const gameData = getBasicGameDataForDate(data);
+        res.json(gameData);
+    } catch (error) {
+        console.error("Error fetching basic game data: " + error)
     }
 })
 
