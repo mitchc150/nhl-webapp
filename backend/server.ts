@@ -58,7 +58,10 @@ app.get('/api/teamNamesAndLogosByDivision', async (req: any, res: any) => {
 
 app.get('/api/basicGameDataByDate', async (req: any, res: any) => {
     try {
-        const apiRes = await fetch("https://api-web.nhle.com/v1/score/2023-11-10");
+        const date = req.query.date;
+        console.log(date);
+        const apiRes = await fetch(`https://api-web.nhle.com/v1/score/${date}`);
+        console.log(`https://api-web.nhle.com/v1/score/${date}`);
         const data: any = await apiRes.json();
         const gameData = getBasicGameDataForDate(data);
         res.json(gameData);
