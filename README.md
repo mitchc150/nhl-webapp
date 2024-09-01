@@ -1,2 +1,0 @@
-# nhl-webapp
-nhl webapp
