@@ -9,6 +9,10 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Popover from '@mui/material/Popover';
+import CardActionArea from '@mui/material/CardActionArea'
+import Button from '@mui/material/Button';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface TeamGameInfo {
@@ -43,7 +47,7 @@ class BasicGameData {
     awayTeam: TeamGameInfo;
     homeTeam: TeamGameInfo;
     clock: Clock;
-    period: Period
+    period: Period;
 
     constructor(apiData: any) {
         this.id = apiData.id;
@@ -67,15 +71,15 @@ export default function Games() {
     const [games, setGames] = React.useState<BasicGameData[]>([]);
     const [date, setDate] = React.useState<Dayjs>(dayjs());
     const [loading, setLoading] = React.useState(true);
+    const [selectedGame, setSelectedGame] = React.useState<BasicGameData | null>(null);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     React.useEffect(() => {
         const fetchGameData = async (date: Dayjs) => {
             try {
                 var dateString = getDateString(date);
-                console.log(dateString);
                 const response = await fetch(`/api/basicGameDataByDate?date=${dateString}`);
                 var data = await response.json();
-                console.log(data);
                 data = data.map((dataPoint: any) => new BasicGameData(dataPoint));
                 setGames(data);
             } catch (error) {
@@ -88,7 +92,6 @@ export default function Games() {
         fetchGameData(date);
     }, [date]);
 
-    
     const handlePreviousDay = () => {
         setDate(prevDate => {
             return prevDate ? prevDate.subtract(1, 'day') : dayjs().subtract(1, 'day');
@@ -107,24 +110,31 @@ export default function Games() {
         }
     };
 
+    const handleGameClick = (game: BasicGameData) => {
+        setSelectedGame(game);
+    };
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
     if (loading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <CircularProgress />
             </Box>
-        )
+        );
     }
-    
+
     return (
         <Box sx={{ display: 'flex', width: '100%', maxWidth: 1200, alignItems: 'left', margin: 'auto', mt: 4 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', mr: 8 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar
-                        value={date}
-                        onChange={handleDateChange}
-                    />
-                </LocalizationProvider>
-            </Box>
             <Box sx={{ flexGrow: 1, ml: 'auto', mr: 'auto' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 4 }}>
                     <IconButton onClick={handlePreviousDay}>
@@ -136,7 +146,28 @@ export default function Games() {
                     <IconButton onClick={handleNextDay}>
                         <ArrowForwardIosIcon />
                     </IconButton>
+                    <IconButton onClick={handleClick}>
+                        <CalendarMonthIcon />
+                    </IconButton>
+                    <Popover
+                        id={id}
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                        }}
+                    >
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateCalendar
+                                value={date}
+                                onChange={handleDateChange}
+                            />
+                        </LocalizationProvider>
+                    </Popover>
                 </Box>
+                
                 <Box
                     sx={{
                         display: 'flex',
@@ -146,34 +177,46 @@ export default function Games() {
                         mt: 4,
                     }}
                 >
-                    {games.map((game: BasicGameData) => (
-                        <Card key={game.id} sx={{ width: '100%', maxWidth: '600px', padding: 2, textAlign: 'center' }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 4  }}>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <img src={game.homeTeam.logo} alt={game.homeTeam.nameAbbrev} width={80} />
-                                        <Typography>{game.homeTeam.nameAbbrev}</Typography>
+                    {games.length == 0 ?
+                        <Typography variant='h6'>
+                            {'There are no games on this date.'}
+                        </Typography>
+                        :
+                        games.map((game: BasicGameData) => (
+                            <Card key={game.id} sx={{ width: '100%', maxWidth: '800px', textAlign: 'center', cursor: 'pointer' }} onClick={() => handleGameClick(game)}>
+                                <CardActionArea sx={{ padding: 2 }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
+                                        <Typography variant='subtitle2'>
+                                            {game.clock.running? `${game.clock.timeRemaining} | Period ${game.period.periodNumber} - ${game.period.periodDescriptor}` : `FINAL`}
+                                        </Typography>
                                     </Box>
-                                    <Typography variant='body2' sx={{ color: 'text-secondary' }}>
-                                        {`SOG: ${game.homeTeam.sog}`}
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <Typography variant='h4'>
-                                        {game.awayTeam.score} - {game.homeTeam.score}
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 4  }}>
-                                    <Typography variant='body2' sx={{ color: 'text-secondary' }}>
-                                        {`SOG: ${game.awayTeam.sog}`}
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <img src={game.awayTeam.logo} alt={game.awayTeam.nameAbbrev} width={80} />
-                                        <Typography>{game.awayTeam.nameAbbrev}</Typography>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                <img src={game.homeTeam.logo} alt={game.homeTeam.nameAbbrev} width={80} />
+                                                <Typography>{game.homeTeam.nameAbbrev}</Typography>
+                                            </Box>
+                                            <Typography variant='body2' sx={{ color: 'text-secondary' }}>
+                                                {`SOG: ${game.homeTeam.sog}`}
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                            <Typography variant='h4'>
+                                                {game.homeTeam.score} - {game.awayTeam.score}
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                            <Typography variant='body2' sx={{ color: 'text-secondary' }}>
+                                                {`SOG: ${game.awayTeam.sog}`}
+                                            </Typography>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                <img src={game.awayTeam.logo} alt={game.awayTeam.nameAbbrev} width={80} />
+                                                <Typography>{game.awayTeam.nameAbbrev}</Typography>
+                                            </Box>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            </Box>
-                        </Card>
+                                </CardActionArea>
+                            </Card>
                     ))}
                 </Box>
             </Box>
